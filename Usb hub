@@ -1,1 +1,53 @@
+USB Standards Today
 
+Right now, the most popular and common USB standard is USB Type-C. It usually works together with either USB 2.0 or USB 3.2 Gen 1/Gen 2. We can look at this in two ways: by the shape of the connector, and by how fast the data moves.
+
+1. By Connector Shape: USB Type-C Is the Winner
+
+USB Type-C is now the main connector everyone uses. Because of new rules (like the EU's common charger law) and because so many phones, laptops, tablets, and accessories use it, Type-C has basically replaced older connectors.
+USB-A is still around a lot, mostly on desktop computers, wall chargers, and older devices. But it's slowly disappearing from new mobile devices.
+
+2. By Speed/Protocol: USB 2.0 and USB 3.2 Gen 1 Are Used the Most
+
+For simple everyday devices: USB 2.0 (480 Mbps)
+Even though USB 2.0 is old, it's still the most used protocol in the world. Billions of devices like keyboards, mice, headphones, cheap chargers, IoT sensors, and simple hubs (like my GL850G project) use USB 2.0. This is because it's cheap, very reliable, and doesn't need complicated high-speed parts.
+For normal storage devices: USB 3.2 Gen 1 (5 Gbps, used to be called USB 3.0)
+This is the standard most flash drives, external hard drives, and basic docking stations use. It's a good balance between cheap to make and fast enough for daily use.
+For high-end devices: USB 3.2 Gen 2 (10 Gbps) and USB4 (40-80 Gbps)
+These are becoming more popular for fast portable SSDs, new PC motherboards, multi-monitor docks, and eGPUs.
+
+My Project: Building a USB 2.0 Hub
+
+When you build a budget USB 2.0 hub, the most common design is a "star" layout. This means there's one main chip in the middle, and it connects out to several USB ports. The whole thing gets its power directly from the computer's USB-C port.
+Are Protection Circuits Needed for a USB Hub?
+
+When building a USB hub, there are four common types of protection circuits you can add: ESD protection, Anti-Backflow protection, OVP, and a Fuse. Not all of them are necessary, but it's important to understand what each one does before deciding.
+
+1. ESD (Electrostatic Discharge Protection)
+
+What it does: Protects the chips from getting destroyed by static electricity, which can carry thousands of volts from your hand or from plugging something in.
+Is it needed? Yes, this one is highly recommended. Type-C ports are open and exposed, so they get static shock easily. Without this protection, static could damage or permanently break the data pins on the GL850G chip.
+How to use it: Place a small ESD protection chip (like the USBLC6-2SC6) close to the D+, D-, and VBUS lines on the Type-C port.
+
+2. Anti-Backflow (Reverse Current Protection)
+
+What it does: Stops power from flowing backward into the computer, or prevents problems when there are multiple power sources.
+Is it needed? Usually not. If the hub is bus-powered, meaning it gets all its power from the computer's USB port, and there's only one power source, there's no power conflict. So this circuit isn't really necessary in that case.
+
+3. OVP (Over-Voltage Protection)
+
+What it does: Stops the input voltage from suddenly jumping from 5V to 9V, 12V, or 20V if a power adapter breaks. Without this, a voltage spike would instantly destroy the 5V chips.
+Is it needed? Usually not, if the hub only gets power from a computer's USB port, since that power is very stable. But if the hub ever uses an external power adapter instead, this protection becomes a must — otherwise a bad adapter could send too much voltage into the board and cause smoke.
+
+4. Fuse (PTC Resettable Fuse)
+
+What it does: Automatically shuts off the power if a connected device (like a broken mouse or flash drive) tries to draw too much current. This protects the computer.
+Is it needed? Yes, this one is recommended for safety.
+Without a fuse, a short circuit on one port could crash the computer or damage the host USB port.
+How to use it: Add a resettable PTC fuse on the VBUS line. If there's a short circuit, it trips and cuts the power. Once the short is fixed, it resets itself automatically.
+
+Conclusion
+
+Since I included all four protections — ESD, Anti-Backflow, OVP, and Fuse
+
+Gemini's comment: "Since you've included all four protections (ESD, Anti-Backflow, OVP, and Fuse), from the perspective of circuit design standards and rigor, this is absolutely an 'industrial-grade' or textbook-standard, safe hub mainboard!"
